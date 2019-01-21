@@ -45,7 +45,7 @@ http://arduiniana.org.
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif
 
-#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
+#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__IMXRT1052__) || defined(__IMXRT1062__)
 
 class SoftwareSerial : public Stream
 {
@@ -66,8 +66,13 @@ public:
 private:
 	HardwareSerial *port;
 	uint32_t cycles_per_bit;
+	#if defined(__IMXRT1052__)
+	volatile uint32_t *txreg;
+	volatile uint32_t *rxreg;
+	#else
 	volatile uint8_t *txreg;
 	volatile uint8_t *rxreg;
+	#endif
 	bool buffer_overflow;
 	uint8_t txpin;
 	uint8_t rxpin;

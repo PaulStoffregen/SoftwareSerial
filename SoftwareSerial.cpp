@@ -44,11 +44,38 @@ http://arduiniana.org.
 #include <SoftwareSerial.h>
 
 
-#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
+#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__IMXRT1052__) || defined(__IMXRT1062__)
 
 SoftwareSerial::SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic /* = false */)
 {
 	buffer_overflow = false;
+	#if defined(__IMXRT1052__) || defined(__IMXRT1062__)
+	if (rxPin == 0 && txPin == 1) {
+		port = &Serial1;
+		return;
+	} else if (rxPin == 6 && txPin == 7) {
+		port = &Serial2;
+		return;
+	} else if (rxPin == 14 && txPin == 15) {
+		port = &Serial3;
+		return;
+	} else if (rxPin == 16 && txPin == 17) {
+		port = &Serial4;
+		return;
+	} else if (rxPin == 20 && txPin == 21) {
+		port = &Serial5;
+		return;
+	} else if (rxPin == 24 && txPin == 25) {
+		port = &Serial8;
+		return;
+	} else if (rxPin == 28 && txPin == 29) {
+		port = &Serial7;
+		return;
+	} else if (rxPin == 30 && txPin == 31) {
+		port = &Serial8;
+		return;
+	}	
+	#else
 	if (rxPin == 0 && txPin == 1) {
 		port = &Serial1;
 		return;
@@ -59,6 +86,7 @@ SoftwareSerial::SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic 
 		port = &Serial3;
 		return;
 	}
+	#endif
 	port = NULL;
 	pinMode(txPin, OUTPUT);
 	pinMode(rxPin, INPUT_PULLUP);
