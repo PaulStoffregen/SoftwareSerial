@@ -62,11 +62,11 @@ SoftwareSerial::SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic 
 	} else if (rxPin == 16 && txPin == 17) {
 		port = &Serial4;
 		return;
-	} else if (rxPin == 20 && txPin == 21) {
+	} else if (rxPin == 21 && txPin == 20) {
 		port = &Serial5;
 		return;
-	} else if (rxPin == 24 && txPin == 25) {
-		port = &Serial8;
+	} else if (rxPin == 25 && txPin == 24) {
+		port = &Serial6;
 		return;
 	} else if (rxPin == 28 && txPin == 29) {
 		port = &Serial7;
