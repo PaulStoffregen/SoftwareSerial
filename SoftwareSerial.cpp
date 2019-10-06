@@ -71,9 +71,6 @@ SoftwareSerial::SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic 
 	} else if (rxPin == 28 && txPin == 29) {
 		port = &Serial7;
 		return;
-	} else if (rxPin == 30 && txPin == 31) {
-		port = &Serial8;
-		return;
 	}	
 	#else
 	if (rxPin == 0 && txPin == 1) {

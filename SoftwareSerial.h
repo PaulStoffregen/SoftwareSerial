@@ -66,7 +66,7 @@ public:
 private:
 	HardwareSerial *port;
 	uint32_t cycles_per_bit;
-	#if defined(__IMXRT1052__)
+	#if defined(__IMXRT1052__) || defined(__IMXRT1062__)
 	volatile uint32_t *txreg;
 	volatile uint32_t *rxreg;
 	#else
