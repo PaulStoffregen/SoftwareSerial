@@ -231,6 +231,30 @@ static const DELAY_TABLE PROGMEM table[] =
   { 300,      3804,      7617,      7617,     7614,  },
 };
 
+#elif F_CPU == 16500000
+#warning 16.5MHz proc detected
+
+// DigiSpark support taken from:
+// http://digistump.com/board/index.php/topic,212.0.html
+
+static const DELAY_TABLE PROGMEM table[] =
+{
+  //  baud    rxcenter   rxintra    rxstop    tx
+  { 115200,   1,         16,        16,       12,    },
+  { 57600,    10,        38,        38,       34,    },
+  { 38400,    26,        59,        59,       56,    },
+  { 31250,    32,        72,        72,       70,    },
+  { 28800,    35,        79,        79,       76,    },
+  { 19200,    56,        121,       121,      118,   },
+  { 14400,    76,        161,       161,      158,   },
+  { 9600,     118,       243,       243,      240,   },
+  { 4800,     240,       489,       489,      486,   },
+  { 2400,     486,       980,       980,      977,   },
+  { 1200,     977,       1961,      1961,     1958,  },
+  { 600,      1961,      3923,      3923,     3919,  },
+  { 300,      3923,      7855,      7855,     7852,  },
+};
+
 const int XMIT_START_ADJUSTMENT = 5;
 
 #elif F_CPU == 8000000
