@@ -11,19 +11,14 @@
  buffer is empty. This example switches ports when there is nothing
  more to read from a port
  
- The circuit: 
  Two devices which communicate serially are needed.
- * First serial device's TX attached to digital pin 2, RX to pin 3
- * Second serial device's TX attached to digital pin 4, RX to pin 5
- 
- Note:
- Not all pins on the Mega and Mega 2560 support change interrupts, 
- so only the following can be used for RX: 
- 10, 11, 12, 13, 50, 51, 52, 53, 62, 63, 64, 65, 66, 67, 68, 69
- 
- Not all pins on the Leonardo support change interrupts, 
- so only the following can be used for RX: 
- 8, 9, 10, 11, 14 (MISO), 15 (SCK), 16 (MOSI).
+ * First serial device's TX attached to digital pin 0, RX to pin 1
+ * Second serial device's TX attached to digital pin 7, RX to pin 8
+
+ With serial devices, always connect a TX to RX and RX to TX.
+ Avoid the common mistake of automatically connecting signals with
+ the same name together, as is done with SPI and Wire.  With Serial
+ the signal names indicate direction.
  
  created 18 Apr. 2011
  modified 25 May 2012
@@ -35,12 +30,11 @@
  */
 
 #include <SoftwareSerial.h>
-// software serial #1: TX = digital pin 10, RX = digital pin 11
-SoftwareSerial portOne(10,11);
+// software serial #1: RX = digital pin 0, TX = digital pin 1
+SoftwareSerial portOne(0,1);
 
-// software serial #2: TX = digital pin 8, RX = digital pin 9
-// on the Mega, use other pins instead, since 8 and 9 don't work on the Mega
-SoftwareSerial portTwo(8,9);
+// software serial #2: RX = digital pin 7, TX = digital pin 8
+SoftwareSerial portTwo(7,8);
 
 void setup()
 {
