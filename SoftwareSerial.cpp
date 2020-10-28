@@ -46,44 +46,121 @@ http://arduiniana.org.
 
 #if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__IMXRT1052__) || defined(__IMXRT1062__)
 
+
+// Teensy LC, 3.0, 3.1, 3.2
+#if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__)
+  #define SS1_RX  0
+  #define SS1_TX  1
+  #define SS2_RX  9
+  #define SS2_TX 10
+  #define SS3_RX  7
+  #define SS3_TX  8
+
+// Teensy 3.5, 3.6
+#elif defined(__MK64FX512__) || defined(__MK66FX1M0__)
+  #define SS1_RX  0
+  #define SS1_TX  1
+  #define SS2_RX  9
+  #define SS2_TX 10
+  #define SS3_RX  7
+  #define SS3_TX  8
+  #define SS4_RX 31
+  #define SS4_TX 32
+  #define SS5_RX 34
+  #define SS5_TX 33
+  #define SS6_RX 47
+  #define SS6_TX 48
+
+// Teensy 4.0
+#elif defined(__IMXRT1062__) && defined(ARDUINO_TEENSY40)
+  #define SS1_RX  0
+  #define SS1_TX  1
+  #define SS2_RX  7
+  #define SS2_TX  8
+  #define SS3_RX 15
+  #define SS3_TX 14
+  #define SS4_RX 16
+  #define SS4_TX 17
+  #define SS5_RX 21
+  #define SS5_TX 20
+  #define SS6_RX 25
+  #define SS6_TX 24
+  #define SS7_RX 28
+  #define SS7_TX 29
+
+// Teensy 4.1
+#elif defined(__IMXRT1062__) && defined(ARDUINO_TEENSY41)
+  #define SS1_RX  0
+  #define SS1_TX  1
+  #define SS2_RX  7
+  #define SS2_TX  8
+  #define SS3_RX 15
+  #define SS3_TX 14
+  #define SS4_RX 16
+  #define SS4_TX 17
+  #define SS5_RX 21
+  #define SS5_TX 20
+  #define SS6_RX 25
+  #define SS6_TX 24
+  #define SS7_RX 28
+  #define SS7_TX 29
+  #define SS8_RX 34
+  #define SS8_TX 35
+
+#endif
+
 SoftwareSerial::SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic /* = false */)
 {
 	buffer_overflow = false;
-	#if defined(__IMXRT1052__) || defined(__IMXRT1062__)
-	if (rxPin == 0 && txPin == 1) {
+
+#if defined(SS1_RX) && defined(SS1_TX)
+	if (rxPin == SS1_RX && txPin == SS1_TX) {
 		port = &Serial1;
 		return;
-	} else if (rxPin == 6 && txPin == 7) {
+	}
+#endif
+#if defined(SS2_RX) && defined(SS2_TX)
+	if (rxPin == SS2_RX && txPin == SS2_TX) {
 		port = &Serial2;
 		return;
-	} else if (rxPin == 14 && txPin == 15) {
-		port = &Serial3;
-		return;
-	} else if (rxPin == 16 && txPin == 17) {
-		port = &Serial4;
-		return;
-	} else if (rxPin == 21 && txPin == 20) {
-		port = &Serial5;
-		return;
-	} else if (rxPin == 25 && txPin == 24) {
-		port = &Serial6;
-		return;
-	} else if (rxPin == 28 && txPin == 29) {
-		port = &Serial7;
-		return;
-	}	
-	#else
-	if (rxPin == 0 && txPin == 1) {
-		port = &Serial1;
-		return;
-	} else if (rxPin == 9 && txPin == 10) {
-		port = &Serial2;
-		return;
-	} else if (rxPin == 7 && txPin == 8) {
+	}
+#endif
+#if defined(SS3_RX) && defined(SS3_TX)
+	if (rxPin == SS3_RX && txPin == SS3_TX) {
 		port = &Serial3;
 		return;
 	}
-	#endif
+#endif
+#if defined(SS4_RX) && defined(SS4_TX)
+	if (rxPin == SS4_RX && txPin == SS4_TX) {
+		port = &Serial4;
+		return;
+	}
+#endif
+#if defined(SS5_RX) && defined(SS5_TX)
+	if (rxPin == SS5_RX && txPin == SS5_TX) {
+		port = &Serial5;
+		return;
+	}
+#endif
+#if defined(SS6_RX) && defined(SS6_TX)
+	if (rxPin == SS6_RX && txPin == SS6_TX) {
+		port = &Serial6;
+		return;
+	}
+#endif
+#if defined(SS7_RX) && defined(SS7_TX)
+	if (rxPin == SS7_RX && txPin == SS7_TX) {
+		port = &Serial7;
+		return;
+	}
+#endif
+#if defined(SS8_RX) && defined(SS8_TX)
+	if (rxPin == SS8_RX && txPin == SS8_TX) {
+		port = &Serial8;
+		return;
+	}
+#endif
 	port = NULL;
 	pinMode(txPin, OUTPUT);
 	pinMode(rxPin, INPUT_PULLUP);
