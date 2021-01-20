@@ -123,12 +123,12 @@ public:
   void end();
   bool isListening() { return this == active_object; }
   bool overflow() { bool ret = _buffer_overflow; _buffer_overflow = false; return ret; }
-  int peek();
+  int peek() override;
 
-  virtual size_t write(uint8_t byte);
-  virtual int read();
-  virtual int available();
-  virtual void flush();
+  virtual size_t write(uint8_t byte) override;
+  virtual int read() override;
+  virtual int available() override;
+  virtual void flush() override;
   
   using Print::write;
 
