@@ -40,10 +40,18 @@ http://arduiniana.org.
 * Definitions
 ******************************************************************************/
 
-#define _SS_MAX_RX_BUFF 64 // RX buffer size
 #ifndef GCC_VERSION
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif
+
+constexpr bool is_powerof2(int v) {
+    return v && ((v & (v - 1)) == 0);
+}
+
+const unsigned int _SS_MAX_RX_BUFF       = 64u;                  // RX buffer size
+const unsigned int _SS_MAX_RX_BUFF_MASK  = (_SS_MAX_RX_BUFF - 1u); // mask for buffer size
+
+static_assert(is_powerof2(_SS_MAX_RX_BUFF), "Max RX buffer should be a power of 2.");
 
 #if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__IMXRT1052__) || defined(__IMXRT1062__)
 
