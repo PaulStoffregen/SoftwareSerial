@@ -44,14 +44,19 @@ http://arduiniana.org.
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif
 
-constexpr bool is_powerof2(int v) {
-    return v && ((v & (v - 1)) == 0);
-}
-
 const unsigned int _SS_MAX_RX_BUFF       = 64u;                  // RX buffer size
-const unsigned int _SS_MAX_RX_BUFF_MASK  = (_SS_MAX_RX_BUFF - 1u); // mask for buffer size
+const unsigned int _SS_MAX_RX_BUFF_MASK  = _SS_MAX_RX_BUFF - 1u; // mask for buffer size
 
-static_assert(is_powerof2(_SS_MAX_RX_BUFF), "Max RX buffer should be a power of 2.");
+/******************************************************************************
+ * Compile time check that _SS_MAX_RX_BUFF is a power of 2
+ * https://stackoverflow.com/questions/3385515/static-assert-in-cj
+ ******************************************************************************/
+
+#define STATIC_ASSERT_IS_POWER_OF_2(_v_, _MSG_)                      \
+    typedef char static_assertion_##_MSG_[                           \
+      ( (_v_) && ( ( (_v_) & ( (_v_) - 1) ) == 0 ) ) ? 1 : -1 ]
+
+STATIC_ASSERT_IS_POWER_OF_2(_SS_MAX_RX_BUFF, Max_RX_buffer_should_be_a_power_of_2);
 
 #if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__IMXRT1052__) || defined(__IMXRT1062__)
 
