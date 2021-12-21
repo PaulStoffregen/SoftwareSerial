@@ -62,6 +62,7 @@ public:
 	int peek();
 	virtual void flush();
 	virtual size_t write(uint8_t byte);
+	operator bool() { return true; }
 	using Print::write;
 private:
 	HardwareSerial *port;
@@ -129,21 +130,13 @@ public:
   virtual int read();
   virtual int available();
   virtual void flush();
+  operator bool() { return true; }
   
   using Print::write;
 
   // public only for easy access by interrupt handlers
   static inline void handle_interrupt();
 };
-
-// Arduino 0012 workaround
-#undef int
-#undef char
-#undef long
-#undef byte
-#undef float
-#undef abs
-#undef round
 
 #endif
 
