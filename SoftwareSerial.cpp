@@ -107,6 +107,23 @@ http://arduiniana.org.
   #define SS8_RX 34
   #define SS8_TX 35
 
+// Teensy MICROMOD
+#elif defined(__IMXRT1062__) && defined(ARDUINO_TEENSY_MICROMOD)
+  #define SS1_RX  0
+  #define SS1_TX  1
+  #define SS2_RX 16
+  #define SS2_TX 17
+  #define SS3_RX 15
+  #define SS3_TX 14
+  #define SS4_RX  7
+  #define SS4_TX  8
+  #define SS5_RX 21
+  #define SS5_TX 20
+  #define SS6_RX 25
+  #define SS6_TX 24
+  #define SS7_RX 28
+  #define SS7_TX 29
+
 #endif
 
 SoftwareSerial::SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic /* = false */)

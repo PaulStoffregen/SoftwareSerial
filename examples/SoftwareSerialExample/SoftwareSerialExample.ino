@@ -31,7 +31,7 @@ SoftwareSerial mySerial(7, 8);
 //SoftwareSerial mySerial(34, 33);
 //SoftwareSerial mySerial(47, 48);
 
-// Best for Teensy 4.1
+// Best for Teensy 4 & 4.1 & MICROMOD
 //SoftwareSerial mySerial(0, 1); // RX,TX
 //SoftwareSerial mySerial(7, 8);
 //SoftwareSerial mySerial(15, 14);
@@ -39,7 +39,7 @@ SoftwareSerial mySerial(7, 8);
 //SoftwareSerial mySerial(21, 20);
 //SoftwareSerial mySerial(25, 24);
 //SoftwareSerial mySerial(28, 29);
-//SoftwareSerial mySerial(34, 35);
+//SoftwareSerial mySerial(34, 35);  // Teensy 4.1 only
 
 
 void setup()
