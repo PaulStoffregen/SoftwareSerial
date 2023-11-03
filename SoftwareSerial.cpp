@@ -404,6 +404,9 @@ inline void DebugPulse(uint8_t pin, uint8_t count)
     *pport = val | digitalPinToBitMask(pin);
     *pport = val;
   }
+#else
+  (void) pin;
+  (void) count;
 #endif
 }
 
@@ -495,11 +498,11 @@ void SoftwareSerial::recv()
       d = ~d;
 
     // if buffer full, set the overflow flag and return
-    if ((_receive_buffer_tail + 1) % _SS_MAX_RX_BUFF != _receive_buffer_head) 
+    if ( ( (_receive_buffer_tail + 1) & _SS_MAX_RX_BUFF_MASK ) != _receive_buffer_head) 
     {
       // save new data in buffer: tail points to where byte goes
       _receive_buffer[_receive_buffer_tail] = d; // save new byte
-      _receive_buffer_tail = (_receive_buffer_tail + 1) % _SS_MAX_RX_BUFF;
+      _receive_buffer_tail = (_receive_buffer_tail + 1) & _SS_MAX_RX_BUFF_MASK;
     } 
     else 
     {
@@ -682,7 +685,7 @@ int SoftwareSerial::read()
 
   // Read from "head"
   uint8_t d = _receive_buffer[_receive_buffer_head]; // grab next byte
-  _receive_buffer_head = (_receive_buffer_head + 1) % _SS_MAX_RX_BUFF;
+  _receive_buffer_head = (_receive_buffer_head + 1) & _SS_MAX_RX_BUFF_MASK;
   return d;
 }
 
@@ -691,7 +694,7 @@ int SoftwareSerial::available()
   if (!isListening())
     return 0;
 
-  return (_receive_buffer_tail + _SS_MAX_RX_BUFF - _receive_buffer_head) % _SS_MAX_RX_BUFF;
+  return (_receive_buffer_tail + _SS_MAX_RX_BUFF - _receive_buffer_head) & _SS_MAX_RX_BUFF_MASK;
 }
 
 size_t SoftwareSerial::write(uint8_t b)
