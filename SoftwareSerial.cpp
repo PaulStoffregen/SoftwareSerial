@@ -183,8 +183,15 @@ SoftwareSerial::SoftwareSerial(uint8_t rxPin, uint8_t txPin, bool inverse_logic 
 	pinMode(rxPin, INPUT_PULLUP);
 	txpin = txPin;
 	rxpin = rxPin;
+#if defined(__IMXRT1052__) || defined(__IMXRT1062__)
+	tx_clear_reg = portClearRegister(digitalPinToPort(txPin));
+	tx_set_reg = portSetRegister(digitalPinToPort(txPin));
+	tx_bitmask = digitalPinToBitMask(digitalPinToPort(txPin));
+	rxreg = portInputRegister(digitalPinToPort(rxPin));
+#else
 	txreg = portOutputRegister(digitalPinToPort(txPin));
 	rxreg = portInputRegister(digitalPinToPort(rxPin));
+#endif
 	cycles_per_bit = 0;
 }
 
@@ -248,16 +255,20 @@ size_t SoftwareSerial::write(uint8_t b)
 	target = cycles_per_bit;
 	noInterrupts();
 	begin_cycle = ARM_DWT_CYCCNT;
-	*txreg = 0;
+	tx0();
 	wait_for_target(begin_cycle, target);
 	// 8 data bits
 	for (mask = 1; mask; mask <<= 1) {
-		*txreg = (b & mask) ? 1 : 0;
+		if (b & mask) {
+			tx1();
+		} else {
+			tx0();
+		}
 		target += cycles_per_bit;
 		wait_for_target(begin_cycle, target);
 	}
 	// stop bit
-	*txreg = 1;
+	tx1();
 	interrupts();
 	target += cycles_per_bit;
 	while (ARM_DWT_CYCCNT - begin_cycle < target) ; // wait

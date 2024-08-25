@@ -68,11 +68,17 @@ private:
 	HardwareSerial *port;
 	uint32_t cycles_per_bit;
 	#if defined(__IMXRT1052__) || defined(__IMXRT1062__)
-	volatile uint32_t *txreg;
+	volatile uint32_t *tx_clear_reg;
+	volatile uint32_t *tx_set_reg;
+	uint32_t tx_bitmask;
 	volatile uint32_t *rxreg;
+	inline void tx0() { *tx_clear_reg = tx_bitmask; }
+	inline void tx1() { *tx_set_reg = tx_bitmask; }
 	#else
 	volatile uint8_t *txreg;
 	volatile uint8_t *rxreg;
+	inline void tx0() { *txreg = 0; } // assumes Cortex-M4 bitband address
+	inline void tx1() { *txreg = 1; }
 	#endif
 	bool buffer_overflow;
 	uint8_t txpin;
