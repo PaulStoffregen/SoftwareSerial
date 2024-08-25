@@ -40,7 +40,7 @@ SoftwareSerial mySerial(7, 8);
 //SoftwareSerial mySerial(25, 24);
 //SoftwareSerial mySerial(28, 29);
 //SoftwareSerial mySerial(34, 35);  // Teensy 4.1 only
-
+// Use FlexIO_t4 for other pins
 
 void setup()
 {
