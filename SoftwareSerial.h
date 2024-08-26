@@ -68,6 +68,7 @@ private:
 	HardwareSerial *port;
 	uint32_t cycles_per_bit;
 	float microseconds_per_bit;
+	float microseconds_start;
 	#if defined(__IMXRT1052__) || defined(__IMXRT1062__)
 	volatile uint32_t *tx_clear_reg;
 	volatile uint32_t *tx_set_reg;

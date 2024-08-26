@@ -202,6 +202,9 @@ void SoftwareSerial::begin(unsigned long speed)
 		rx_tail = 0;
 		cycles_per_bit = (uint32_t)(F_CPU + speed / 2) / speed;
 		microseconds_per_bit = (float)cycles_per_bit / (float)(F_CPU / 1000000);
+		// TODO: latency estimate could be better tuned to each board
+		const float latency = 900.0f / (float)(F_CPU / 1000000);
+		microseconds_start = microseconds_per_bit * 1.5f - latency;
 		ARM_DEMCR |= ARM_DEMCR_TRCENA;
 		ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
 		pinMode(txpin, OUTPUT);
@@ -309,12 +312,9 @@ void SoftwareSerial::data_bit_sampling_timer()
 void SoftwareSerial::start_bit_begin()
 {
 	//digitalWriteFast(12, HIGH);
-	//Serial.println("start_bit_begin");
-	// TODO: perhaps subtract a small "kludge factor" from the microseconds to
-	// help compensate for interrupt latency and code delay...
-	if (data_bit_timer.begin(data_bit_sampling_timer, microseconds_per_bit * 1.5f)) {
-		detachInterrupt(rxpin);
+	if (data_bit_timer.begin(data_bit_sampling_timer, microseconds_start)) {
 		data_bit_timer.update(microseconds_per_bit);
+		detachInterrupt(rxpin);
 		rxcount = 0;
 		rxbyte = 0;
 	} else {
@@ -328,7 +328,6 @@ void SoftwareSerial::data_bit_sample()
 	//digitalWriteFast(12, HIGH);
 	if (digitalRead(rxpin) == HIGH) rxbyte |= (1 << rxcount);
 	rxcount = rxcount + 1;
-	//Serial.println("data_bit_sample");
 	if (rxcount == 8) { // last data bit
 		uint16_t head = rx_head + 1;
 		if (head >= _SS_MAX_RX_BUFF) head = 0;
@@ -336,7 +335,6 @@ void SoftwareSerial::data_bit_sample()
 			rx_buffer[head] = rxbyte;
 			rx_head = head;
 		}
-		//Serial.printf("rxbyte = %02X\n", rxbyte);
 	}
 	if (rxcount >= 9) { // stop bit
 		data_bit_timer.end();
